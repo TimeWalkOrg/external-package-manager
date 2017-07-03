@@ -6,7 +6,9 @@ using System;
 
 public class ExternalPackageManager
 {
+    private static string externalAssetDirectory = Path.Combine("Assets", "External");
     private static string externalAssetDirectoryPath = Path.Combine(Application.dataPath, "External");
+    
     public static ExportPackageOptions exportOptions = ExportPackageOptions.IncludeDependencies | ExportPackageOptions.Recurse;
 
     protected static PackagesJson packagesJson;
@@ -36,13 +38,20 @@ public class ExternalPackageManager
 
             // Export a package per export directory defined in packages.json
             foreach (string packageFolder in packagesJson.exports)
-            {
-                string fileName = packageFolder + "-v" + packagesJson.version + ".unitypackage";
+            {   
                 string packageFolderPath = Path.Combine(externalAssetDirectoryPath, packageFolder);
+
                 if (Directory.Exists(packageFolderPath))
                 {
-                    AssetDatabase.ExportPackage(packageFolderPath, 
-                        Path.Combine(buildFolderPath, fileName), exportOptions);
+                    string packageBuildName = packageFolder + "-v" + packagesJson.version + ".unitypackage";
+                    string packageBuildPath = Path.Combine(buildFolderPath, packageBuildName);
+
+                    // TODO Collect package names for dialog
+
+                    Debug.Log("Exporting assets from " + externalAssetDirectoryPath + " to package " + packageBuildPath);
+                    AssetDatabase.ExportPackage(externalAssetDirectory, packageBuildPath, exportOptions);
+
+                    // TODO Show dialog of exported packages
                 } else
                 {
                     EditorUtility.DisplayDialog("External Package Manager",
@@ -87,7 +96,6 @@ public class ExternalPackageManager
         {
             if (File.Exists(packagesPath))
             {
-                // TODO try/catch
                 string dataAsJson = File.ReadAllText(packagesPath);
                 packagesJson = JsonUtility.FromJson<PackagesJson>(dataAsJson);
             }
