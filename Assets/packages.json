@@ -4,6 +4,7 @@
     "test"
   ],
   "dependencies": [
-    "https://example.com/foo-v4.unitypackage"
+    "https://www.dropbox.com/s/n9969so8bh57jms/sphere-v1.unitypackage?dl=1",
+    "https://www.dropbox.com/s/8j0mupy3ugcnnx2/cylinder-v1.unitypackage?dl=1"
   ]
 }

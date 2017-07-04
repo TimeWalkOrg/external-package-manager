@@ -17,7 +17,7 @@ public class ExternalPackageManager
     [MenuItem("Assets/External Package Manager/Export All")]
     static void ExportAll()
     {
-        Debug.Log("ExportAll");
+        Debug.Log("EPM: ExportAll");
         parsePackagesJson();
         try
         {
@@ -40,7 +40,7 @@ public class ExternalPackageManager
                     string packageBuildName = packageFolder + "-v" + packagesJson.version + ".unitypackage";
                     string packageBuildPath = Path.GetFullPath(Path.Combine(buildFolderPath, packageBuildName));
                     
-                    Debug.Log("Exporting assets from " + externalAssetDirectoryPath + " to package " + packageBuildPath);
+                    Debug.Log("EPM: Exporting assets from " + externalAssetDirectoryPath + " to package " + packageBuildPath);
                     AssetDatabase.ExportPackage(externalAssetDirectory, packageBuildPath, exportOptions);
 
                     exportedPackages.Add(packageBuildPath);
@@ -74,17 +74,64 @@ public class ExternalPackageManager
     static void ImportAll()
     {
         // Download and import all packages from package.json
-        Debug.Log("ImportAll");
+        Debug.Log("EPM: ImportAll");
         parsePackagesJson();
 
-        // TODO
+        int numDependencies = packagesJson.dependencies.Count;
+        for (int i = 0; i < numDependencies; i++) 
+        {
+            string dependencyUrl = packagesJson.dependencies[i];
+            string dialogMessage = "Downloading " + Path.GetFileName(dependencyUrl) + " (" + (i + 1) + " of " + numDependencies + ")";
+            float lastProgress = -1f;
+
+            Debug.Log("EPM: " + dialogMessage);
+            WWW www = new WWW(dependencyUrl);
+            while (!www.isDone)
+            {
+                // Only update if we have made progress
+                if(lastProgress == -1f || (www.progress - lastProgress > 0.01f))
+                {
+                    if (EditorUtility.DisplayCancelableProgressBar("External Package Manager", dialogMessage, www.progress))
+                    {
+                        Debug.Log("EPM: ImportAll cancelled by user.");
+                        www.Dispose();
+
+                        EditorUtility.ClearProgressBar();
+
+                        // Exit ImportAll
+                        return;
+                    }
+                }
+
+                lastProgress = www.progress;
+            }
+
+            EditorUtility.ClearProgressBar();
+
+            if (www.error != null)
+            {
+                EditorUtility.DisplayDialog("External Package Manager",
+                        "Unable to download " + dependencyUrl + ": " + System.Environment.NewLine + www.error,
+                        "OK");
+            }
+
+            // TODO
+
+            // Save package to temp location
+
+            // Import package
+
+            // Remove temp package location
+        }
+        
+        // Display complete dialog with elapsed time and downloaded bytes
     }
 
     private static void parsePackagesJson()
     {
         string packagesPath = Path.Combine(Application.dataPath, "packages.json");
 
-        Debug.Log("Loading packages file: " + packagesPath);
+        Debug.Log("EPM: Loading packages file: " + packagesPath);
 
         try
         {
