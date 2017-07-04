@@ -62,6 +62,7 @@ Add the following to your `.gitignore` file to ensure external assets aren't che
     /Assets/External/*
 
 If your project depends on external packages *and* exports packages, an exception for one or the other will need to be specified in the `.gitignore`. 
+    
     # Ignore External assets
     /Assets/External*
     /Assets/External/*
