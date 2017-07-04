@@ -6,15 +6,15 @@ EPM also supports bulk-exporting of packages and (eventually) package upload to 
 
 EPM editor script is here: [external-package-manager/Assets/Editor/ExternalPackageManager.cs](https://github.com/TimeWalkOrg/external-package-manager/blob/master/Assets/Editor/ExternalPackageManager.cs)
 
-# Installing
+# Installation and Setup
 1. [Download latest release](https://github.com/TimeWalkOrg/external-package-manager/releases)
 1. Open your Unity Project
 1. `Assets -> Import Package -> Custom Package ...`
 1. Select the downloaded EPM release package
 1. You should now have EPM commands under `Assets -> External Package Manager`
-
-# Setup
-1. Modify `Assets/packages.json` to specify the remote URLs of asset packages you wish to depend, and the asset folder names for packages you wish to export. See 
+1. Modify `Assets/packages.json` to specify the remote URLs of asset packages you wish to depend on, and/or the asset folder names for the packages you wish to export.
+1. Run `Import All` (imported assets can be found in `Assets/External`)
+1. Run `Export All` (package builds can be found in `Builds/Packages`)
 
 # Commands
 
@@ -55,16 +55,18 @@ EPM builds packages with [IncludeDependencies](https://docs.unity3d.com/ScriptRe
 
 ## `.gitignore`
 
-Add the following to your `.gitignore` file to ensure external assets aren't checked into your project's source.
+Add the following to your `.gitignore` file to ensure package builds and external assets aren't checked into your project's source.
 
-    # Ignore External assets
-    /Assets/External*
+    # EPM
+    /Builds/Packages
+    /Assets/External.meta*
     /Assets/External/*
 
 If your project depends on external packages *and* exports packages, an exception for one or the other will need to be specified in the `.gitignore`. 
     
-    # Ignore External assets
-    /Assets/External*
+    # EPM
+    /Builds/Packages
+    /Assets/External.meta*
     /Assets/External/*
     # Except this one
     !/Assets/External/foo
