@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Collections;
 
 public class ExternalPackageManager
 {
@@ -21,10 +22,10 @@ public class ExternalPackageManager
         public List<string> dependencies = new List<string>();
     }
     
-    [MenuItem("Assets/External Package Manager/Export")]
-    static void Export()
+    [MenuItem("Assets/External Package Manager/Export All")]
+    static void ExportAll()
     {
-        Debug.Log("Export");
+        Debug.Log("ExportAll");
         parsePackagesJson();
         try
         {
@@ -40,22 +41,30 @@ public class ExternalPackageManager
             foreach (string packageFolder in packagesJson.exports)
             {   
                 string packageFolderPath = Path.Combine(externalAssetDirectoryPath, packageFolder);
+                ArrayList exportedPackages = new ArrayList();
 
                 if (Directory.Exists(packageFolderPath))
                 {
                     string packageBuildName = packageFolder + "-v" + packagesJson.version + ".unitypackage";
-                    string packageBuildPath = Path.Combine(buildFolderPath, packageBuildName);
-
-                    // TODO Collect package names for dialog
-
+                    string packageBuildPath = Path.GetFullPath(Path.Combine(buildFolderPath, packageBuildName));
+                    
                     Debug.Log("Exporting assets from " + externalAssetDirectoryPath + " to package " + packageBuildPath);
                     AssetDatabase.ExportPackage(externalAssetDirectory, packageBuildPath, exportOptions);
 
-                    // TODO Show dialog of exported packages
+                    exportedPackages.Add(packageBuildPath);
                 } else
                 {
                     EditorUtility.DisplayDialog("External Package Manager",
                         "Unable to find package folder (" + packageFolderPath + ") for export.",
+                        "OK");
+                }
+
+                if(exportedPackages.Count > 0)
+                {   
+                    EditorUtility.DisplayDialog("External Package Manager",
+                        "Exported the following packages: " + 
+                        string.Join("," + System.Environment.NewLine, 
+                            (string[])exportedPackages.ToArray(Type.GetType("System.String"))),
                         "OK");
                 }
                 
@@ -69,22 +78,15 @@ public class ExternalPackageManager
         
     }
 
-    [MenuItem("Assets/External Package Manager/Install")]
-    static void Install()
+    [MenuItem("Assets/External Package Manager/Import All")]
+    static void ImportAll()
     {
         // Download and import all packages from package.json
-        Debug.Log("Install");
+        Debug.Log("ImportAll");
         parsePackagesJson();
-    }
 
-    [MenuItem("Assets/External Package Manager/Delete")]
-    static void Delete()
-    {
-        // Delete all packages in ./Assets/External
-        Debug.Log("Delete");
-        parsePackagesJson();
+        // TODO
     }
-
 
     private static void parsePackagesJson()
     {
