@@ -7,20 +7,12 @@ using System.Collections;
 
 public class ExternalPackageManager
 {
-    private static string externalAssetDirectory = Path.Combine("Assets", "External");
-    private static string externalAssetDirectoryPath = Path.Combine(Application.dataPath, "External");
-    
     public static ExportPackageOptions exportOptions = ExportPackageOptions.IncludeDependencies | ExportPackageOptions.Recurse;
 
     protected static PackagesJson packagesJson;
 
-    protected class PackagesJson
-    {
-        public int version;
-        public string buildFolder = Path.Combine("Builds", "Packages"); // relative to project root
-        public List<string> exports = new List<string>();
-        public List<string> dependencies = new List<string>();
-    }
+    private static string externalAssetDirectory = Path.Combine("Assets", "External");
+    private static string externalAssetDirectoryPath = Path.Combine(Application.dataPath, "External");
     
     [MenuItem("Assets/External Package Manager/Export All")]
     static void ExportAll()
@@ -112,5 +104,13 @@ public class ExternalPackageManager
         {
             Debug.LogException(ex);
         }
+    }
+
+    protected class PackagesJson
+    {
+        public string version;
+        public string buildFolder = Path.Combine("Builds", "Packages"); // relative to project root
+        public List<string> exports = new List<string>();
+        public List<string> dependencies = new List<string>();
     }
 }
