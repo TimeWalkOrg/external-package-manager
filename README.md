@@ -13,8 +13,6 @@ EPM editor script is here: [external-package-manager/Assets/Editor/ExternalPacka
 1. Select the downloaded EPM release package
 1. You should now have EPM commands under `Assets -> External Package Manager`
 1. Modify `Assets/packages.json` to specify the remote URLs of asset packages you wish to depend on, and/or the asset folder names for the packages you wish to export.
-1. Run `Import All` (imported assets can be found in `Assets/External`)
-1. Run `Export All` (package builds can be found in `Builds/Packages`)
 
 # Commands
 
@@ -24,7 +22,7 @@ Download and import all external dependencies specified by `dependencies` field 
 
 ## Export All
 
-Create packages for all folders specified in `packages.json`. Folders must live inside `Assets/External`, which ensures that assets will be located in a single directory when imported.
+Create packages for all folders specified in `packages.json`. Folders must live inside `Assets/External`, which ensures that assets will be located in a single directory when imported. All built packages can be found in `Builds/Packages`.
 
 EPM builds packages with [IncludeDependencies](https://docs.unity3d.com/ScriptReference/ExportPackageOptions.IncludeDependencies.html) and [Recurse](https://docs.unity3d.com/ScriptReference/ExportPackageOptions.Recurse.html) options enabled.
 
