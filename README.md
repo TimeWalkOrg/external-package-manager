@@ -6,7 +6,7 @@ EPM also supports bulk-exporting packages and package upload to S3.
 
 # Installing
 1. [Download latest release](https://github.com/TimeWalkOrg/external-package-manager/releases)
-1. Open Unity Project
+1. Open your Unity Project
 1. `Assets -> Import Package -> Custom Package ...`
 1. Select the downloaded EPM release package
 1. You should now have EPM commands under `Assets -> External Package Manager`
