@@ -5,7 +5,7 @@ A simple asset package manager for Unity3d that is integrated in the editor and 
 EPM also supports bulk-exporting packages and package upload to S3.
 
 # Installing
-1. Download latest release
+1. [Download latest release](https://github.com/TimeWalkOrg/external-package-manager/releases)
 1. Open Unity Project
 1. `Assets -> Import Package -> Custom Package ...`
 1. Select the downloaded EPM release package
