@@ -26,7 +26,7 @@ Download and import all external dependencies specified by `dependencies` field 
 
 Create packages for all folders specified in `packages.json`. Folders must live inside `Assets/External`, which ensures that assets will be located in a single directory when imported.
 
-EPM builds packages with (IncludeDependencies)[https://docs.unity3d.com/ScriptReference/ExportPackageOptions.IncludeDependencies.html] and [Recurse](https://docs.unity3d.com/ScriptReference/ExportPackageOptions.Recurse.html) options enabled.
+EPM builds packages with [IncludeDependencies](https://docs.unity3d.com/ScriptReference/ExportPackageOptions.IncludeDependencies.html) and [Recurse](https://docs.unity3d.com/ScriptReference/ExportPackageOptions.Recurse.html) options enabled.
 
 # `packages.json`
 
