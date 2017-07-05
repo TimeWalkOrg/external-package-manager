@@ -76,33 +76,42 @@ public class ExternalPackageManager
         // Download and import all packages from package.json
         Debug.Log("EPM: ImportAll");
         parsePackagesJson();
-
-        int numDependencies = packagesJson.dependencies.Count;
-        for (int i = 0; i < numDependencies; i++) 
+        try
         {
-            string dependencyUrl = packagesJson.dependencies[i];
-            string dialogMessage = "Downloading " + Path.GetFileName(dependencyUrl) + " (" + (i + 1) + " of " + numDependencies + ")";
-            if (!downloadPackage(dependencyUrl, dialogMessage))
+            int numDependencies = packagesJson.dependencies.Count;
+            double startTime = EditorApplication.timeSinceStartup;
+            string tempFile = FileUtil.GetUniqueTempPathInProject();
+            for (int i = 0; i < numDependencies; i++)
             {
-                // Download failed so exit
-                return;
+                string dependencyUrl = packagesJson.dependencies[i];
+                string dialogMessage = "Downloading " + Path.GetFileName(dependencyUrl) + " (" + (i + 1) + " of " + numDependencies + ")";
+                if (!downloadPackage(dependencyUrl, dialogMessage, tempFile))
+                {
+                    // Download failed so exit
+                    return;
+                }
+
+                // Import package
+                AssetDatabase.ImportPackage(tempFile, false);
+
+                FileUtil.DeleteFileOrDirectory(tempFile);
             }
 
-            // TODO
+            // Time it
+            double totalTime = EditorApplication.timeSinceStartup - startTime;
 
-            // Collect stats
-            
-            // Save package to temp location
-
-            // Import package
-
-            // Remove temp package location
+            // Display complete dialog with elapsed time and downloaded bytes
+            EditorUtility.DisplayDialog("External Package Manager",
+                    "Imported " + numDependencies + " packages in " + Math.Floor(totalTime) + " seconds.",
+                    "OK");
         }
-
-        // Display complete dialog with elapsed time and downloaded bytes
+        catch(Exception ex)
+        {
+            Debug.LogException(ex);
+        }
     }
 
-    private static Boolean downloadPackage(string dependencyUrl, string dialogMessage)
+    private static Boolean downloadPackage(string dependencyUrl, string dialogMessage, string destFile)
     {
         Debug.Log("EPM: " + dialogMessage);
         float lastProgress = -1f;
@@ -135,6 +144,9 @@ public class ExternalPackageManager
                     "OK");
             return false;
         }
+
+        // Save package
+        File.WriteAllBytes(destFile, www.bytes);
 
         return true;
     }
