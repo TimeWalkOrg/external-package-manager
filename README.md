@@ -49,6 +49,9 @@ EPM builds packages with [IncludeDependencies](https://docs.unity3d.com/ScriptRe
       ]
     }
 
+* Invoking `Import All` would result in all the assets contained in the `sphere` and `cylinder` packages being imported into `Assets/External/`.
+* Invoking `Export All` would create `/Builds/packages/foo-v1.unitypackage`, containing all assets under `Assets/External/foo`.
+
 # Tips
 
 ## `.gitignore`
