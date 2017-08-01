@@ -1,6 +1,6 @@
 [![GitHub release](https://img.shields.io/github/release/TimeWalkOrg/external-package-manager.svg)]()
 # External Package Manager (EPM)
-A simple asset package manager for Unity3d that is integrated in the editor and requires no external dependencies or runtime. EPM allows a project to specify dependencies on remotely hosted [Unity Asset Packages](https://docs.unity3d.com/Manual/AssetPackages.html) in a JSON config file (`Assets/packages.json`). This makes it easier to split a large project into multiple reusable projects with minimal setup, and allows open-source Unity projects to depend on third-party assets without making them part of the project source code.
+EPM is a simple asset package manager for Unity3d that is integrated in the editor and requires no external dependencies or runtime. EPM allows a project to specify dependencies on remotely hosted [Unity Asset Packages](https://docs.unity3d.com/Manual/AssetPackages.html) in a JSON config file (`Assets/packages.json`). This makes it easier to split a large project into multiple reusable projects with minimal setup, and allows open-source Unity projects to depend on third-party assets without making them part of the project source code.
 
 EPM also supports bulk-exporting of packages and (eventually) package upload to S3.
 
@@ -74,7 +74,7 @@ If your project depends on external packages *and* exports packages, an exceptio
 
 ## Unity Cloud
 
-It is possible specify custom commands as part of a cloud build, and thus we could trigger an EPM import. However, importing external packages that contain script dependencies won't work properly since the packages would be imported *after* the project is compiled.
+It is possible to specify custom commands as part of a cloud build, and thus we could trigger an EPM import. However, importing external packages that contain script dependencies won't work properly since the packages would be imported *after* the project is compiled.
 
 See [AssetDatabase.ImportPackage in Pre-Export Method](https://forum.unity3d.com/threads/assetdatabase-importpackage-in-pre-export-method.418468/).
 
