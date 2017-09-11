@@ -17,16 +17,15 @@ public class ExternalPackageManager
     private static Queue<String> downloadQueue = null;
     private static int totalDownloads = 0;
     private static int downloadCount = 0;
-    private static WWW currentDownload = null;
 
     private static Action<Boolean> DownloadsComplete;
     private delegate void HandlePackageComplete(Boolean error);
 
-    [MenuItem("Assets/External Package Manager/Export All")]
+    [MenuItem("Assets/External Package Manager/Export All", false, 1)]
     static void ExportAll()
     {
         Debug.Log("EPM: ExportAll");
-        parsePackagesJson();
+        ParsePackagesJson();
         try
         {
             // Make sure build folder exists at project root (inferred from assets folder)
@@ -79,15 +78,40 @@ public class ExternalPackageManager
 
     }
 
-    [MenuItem("Assets/External Package Manager/Import All")]
+    [MenuItem("Assets/External Package Manager/Import All", false, 2)]
     static void ImportAll()
     {
         // Download and import all packages from package.json
         Debug.Log("EPM: ImportAll");
-        parsePackagesJson();
+        ParsePackagesJson();
 
         downloadQueue = new Queue<string>();
+        StartPackageImport();
+    }
 
+    [MenuItem("Assets/External Package Manager/Export Specific Package", false, 11)]
+    static void ExportSpecificPackage()
+    {
+        // TODO
+    }
+
+    [MenuItem("Assets/External Package Manager/Import Specific Package", false, 12)]
+    static void ImportSpecificPackage()
+    {
+        Debug.Log("EPM: ImportSpecificPackage");
+        ParsePackagesJson();
+
+        // XXX This doesn't work... we need an actual editor window
+        int index = EditorGUILayout.Popup(0, packagesJson.dependencies.ToArray());
+
+        downloadQueue = new Queue<String>();
+        downloadQueue.Enqueue(packagesJson.dependencies[index]);
+
+        StartPackageImport();
+    }
+
+    private static void StartPackageImport()
+    {
         // Init queue
         packagesJson.dependencies.ForEach(downloadQueue.Enqueue);
         totalDownloads = downloadQueue.Count;
@@ -201,7 +225,7 @@ public class ExternalPackageManager
         EditorApplication.update += checkDownload;
     }
 
-    private static void parsePackagesJson()
+    private static void ParsePackagesJson()
     {
         string packagesPath = Path.Combine(Application.dataPath, "packages.json");
 
@@ -231,7 +255,7 @@ public class ExternalPackageManager
     {
         public string version;
         public string buildFolder = Path.Combine("Builds", "Packages"); // relative to project root
-        public List<string> exports = new List<string>();
-        public List<string> dependencies = new List<string>();
+        public List<String> exports = new List<String>();
+        public List<String> dependencies = new List<String>();
     }
 }
