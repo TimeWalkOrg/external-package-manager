@@ -159,6 +159,7 @@ public class ExternalPackageManager
                 // Only update if this is the first update or we have made progress
                 if (lastProgress < 0.01f || (www.progress - lastProgress > 0.01f))
                 {
+                    lastProgress = www.progress;
                     if (EditorUtility.DisplayCancelableProgressBar("External Package Manager", dialogMessage, www.progress))
                     {
                         Debug.Log("EPM: ImportAll cancelled by user.");
@@ -168,8 +169,6 @@ public class ExternalPackageManager
                         EditorApplication.update -= checkDownload;
                         callback(true);
                     }
-
-                    lastProgress = www.progress;
                 }
             }
             else
