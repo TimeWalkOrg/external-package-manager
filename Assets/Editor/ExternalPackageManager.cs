@@ -156,8 +156,8 @@ public class ExternalPackageManager
         {
             if (!www.isDone)
             {
-                // Only update if we have made progress
-                if (www.progress - lastProgress > 0.01f)
+                // Only update if this is the first update or we have made progress
+                if (lastProgress < 0.01f || (www.progress - lastProgress > 0.01f))
                 {
                     if (EditorUtility.DisplayCancelableProgressBar("External Package Manager", dialogMessage, www.progress))
                     {
