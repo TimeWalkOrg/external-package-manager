@@ -17,7 +17,6 @@ public class ExternalPackageManager
     private static Queue<String> downloadQueue = null;
     private static int totalDownloads = 0;
     private static int downloadCount = 0;
-    private static WWW currentDownload = null;
 
     private static Action<Boolean> DownloadsComplete;
     private delegate void HandlePackageComplete(Boolean error);
